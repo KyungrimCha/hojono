@@ -177,8 +177,13 @@
     } else { sheet.style.clipPath = 'none'; }
     sheet.querySelector('[data-close]').focus({ preventScroll: true });
   };
-  HOJONO.closeSheet = (sheet) => {
-    const done = () => { sheet.hidden = true; document.body.style.overflow = ''; if (lastFocus) lastFocus.focus({ preventScroll: true }); };
+  /* after: 다 닫힌 뒤(화면 잠금이 풀린 뒤) 할 일. 예: 닫고 지도로 이동 */
+  HOJONO.closeSheet = (sheet, after) => {
+    const done = () => {
+      sheet.hidden = true; document.body.style.overflow = '';
+      if (lastFocus) lastFocus.focus({ preventScroll: true });
+      if (after) after();
+    };
     const v = sheet.querySelector('video'); if (v) v.pause();
     if (gsap && !RM && sheet._from) morph(sheet, rectOf(sheet._from), 1, 0, 0.9, 'expo.inOut', () => { sheet.style.clipPath = ''; done(); });
     else done();
@@ -188,10 +193,9 @@
       const c = e.target.closest('[data-close]');
       if (!c) return;
       e.preventDefault();
-      HOJONO.closeSheet(sheet);
       /* 상세 안의 "이 시제품이 궁금해요" 같은 링크: 닫은 뒤 해당 화면으로 */
       const to = c.dataset.goto && document.getElementById(c.dataset.goto);
-      if (to) setTimeout(() => window.scrollTo({ top: to.getBoundingClientRect().top + window.scrollY - 10, behavior: RM ? 'auto' : 'smooth' }), RM ? 0 : 950);
+      HOJONO.closeSheet(sheet, to ? () => HOJONO.scrollToEl(to) : null);
     });
   });
 
@@ -254,15 +258,43 @@
   };
   document.addEventListener('click', (e) => { const b = e.target.closest('[data-toast]'); if (b) HOJONO.toast(b.dataset.toast); });
 
+  /* 페이지 안에서 다른 화면으로 부드럽게 이동.
+     브라우저 기본 부드러운 이동(behavior:'smooth')은 붙잡힌 화면(쪼꼬미·연회 등)의 위치를 다시 계산할 때
+     중간에 끊기거나 엉뚱한 곳으로 튀므로(특히 휴대폰), 매 프레임 목적지를 다시 재면서 직접 옮긴다.
+     to: 요소 또는 숫자(높이). 손가락·휠·키를 쓰면 바로 멈추고 사용자에게 넘김 */
+  let scrollTween = null;
+  HOJONO.scrollToEl = (to, offset = 10, onDone) => {
+    const target = () => (typeof to === 'number' ? to : to.getBoundingClientRect().top + window.scrollY - offset);
+    const jump = (y) => window.scrollTo({ top: Math.max(0, y), behavior: 'instant' });
+    if (scrollTween) scrollTween.kill();
+    if (!gsap || RM) { jump(target()); if (onDone) onDone(); return; }
+    const from = window.scrollY, o = { p: 0 };
+    const quit = () => { if (scrollTween) scrollTween.kill(); scrollTween = null; off(); };
+    const EV = ['wheel', 'touchstart', 'keydown'];
+    const off = () => EV.forEach((ev) => window.removeEventListener(ev, quit));
+    EV.forEach((ev) => window.addEventListener(ev, quit, { passive: true }));
+    const dur = Math.min(1.4, Math.max(0.6, Math.abs(target() - from) / 3000));
+    scrollTween = gsap.to(o, { p: 1, duration: dur, ease: 'power2.inOut',
+      onUpdate: () => jump(from + (target() - from) * o.p),
+      onComplete: () => { off(); scrollTween = null; jump(target()); if (onDone) onDone(); } });
+  };
+
+  /* 머리의 HOJONO 글자: 첫 화면(히어로)부터 모든 장면이 처음처럼 다시 재생되도록 맨 위에서 새로 불러옴 */
+  const logo = nav.querySelector('.nav-logo');
+  if (logo) logo.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    location.reload();
+  });
+
   /* 같은 페이지 앵커 이동 */
   document.addEventListener('click', (e) => {
     const a = e.target.closest('a[href^="#"]');
-    if (!a) return;
+    if (!a || a === logo) return;
     const id = a.getAttribute('href').slice(1);
-    const t = id === 'top' ? document.body : document.getElementById(id);
-    if (!t) return;
+    const t = id === 'top' ? 0 : document.getElementById(id);
+    if (t == null) return;
     e.preventDefault();
-    const y = id === 'top' ? 0 : t.getBoundingClientRect().top + window.scrollY - 10;
-    window.scrollTo({ top: y, behavior: RM ? 'auto' : 'smooth' });
+    HOJONO.scrollToEl(t);
   });
 })();

@@ -82,7 +82,7 @@
   }
 
   const restart = document.getElementById('restart');
-  if (restart) restart.addEventListener('click', () => window.scrollTo({ top: 0, behavior: H.RM ? 'auto' : 'smooth' }));
+  if (restart) restart.addEventListener('click', () => H.scrollToEl(0));
 })();
 
 /* 모든 효과가 만들어진 뒤: 화면 위치 순으로 정렬하고 다시 계산(고정 구간 높이 반영) */

@@ -40,9 +40,10 @@
     swap.textContent = showingSpirit ? '사람 보기' : '영물 보기';
   });
 
+  /* "이 인물의 길 보기": 상세가 다 닫혀 화면 잠금이 풀린 뒤에 지도로 이동 */
   document.getElementById('personRoute').addEventListener('click', () => {
-    H.closeSheet(sheet);
-    setTimeout(() => { if (H.selectWho) H.selectWho(current, true); }, 500);
+    const who = current;
+    H.closeSheet(sheet, () => { if (H.selectWho) H.selectWho(who); });
   });
 
   document.querySelectorAll('.card').forEach((card) => {
@@ -59,8 +60,6 @@
   document.querySelectorAll('.panel').forEach((p) => p.addEventListener('click', (e) => {
     e.preventDefault();
     const card = document.querySelector(`.card[data-who="${p.dataset.who}"]`);
-    const y = document.getElementById('people').getBoundingClientRect().top + window.scrollY;
-    window.scrollTo({ top: y, behavior: H.RM ? 'auto' : 'smooth' });
-    setTimeout(() => card && card.click(), H.RM ? 0 : 900);
+    H.scrollToEl(document.getElementById('people'), 0, () => card && card.click());
   }));
 })();

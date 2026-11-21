@@ -21,6 +21,8 @@
 <link rel="stylesheet" href="css/site.css">
 <!-- 움직임을 쓰는 화면이면 html에 fx 표시(움직임 줄이기 설정이면 붙지 않음). 첫 화면이 깜빡이지 않게 여기서 먼저 붙임 -->
 <script>if(!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('fx')</script>
+<!-- 새로고침하면 보던 자리가 아니라 첫 화면부터 다시 시작 -->
+<script>if('scrollRestoration' in history)history.scrollRestoration='manual';if(location.hash)history.replaceState(null,'',location.pathname+location.search);window.scrollTo(0,0)</script>
 </head>
 <body>
 

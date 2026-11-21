@@ -201,36 +201,26 @@
     setView(want);
     if (wait) gsap.delayedCall(0.9, () => playCourse(curWho, c)); else playCourse(curWho, c);
   };
-  coursesEl.addEventListener('click', (e) => { const b = e.target.closest('.course-pick'); if (b) choose(+b.dataset.i); });
-  tabs.forEach((t) => t.addEventListener('click', () => { curWho = t.dataset.who; renderCourses(curWho); choose(0); }));
+  /* 지도 바탕은 처음부터 다 보이고, 움직이는 건 코스 경로(까마귀)뿐.
+     지도에 처음 들어오면 첫 코스를 한 번 재생 — 단, 그 전에 다른 화면에서 보낸 코스나 직접 고른 코스가 있으면 그대로 둠 */
+  let played = false;
+  const pick = (i, auto) => { played = true; choose(i, auto); };
+  coursesEl.addEventListener('click', (e) => { const b = e.target.closest('.course-pick'); if (b) pick(+b.dataset.i); });
+  tabs.forEach((t) => t.addEventListener('click', () => { curWho = t.dataset.who; renderCourses(curWho); pick(0); }));
   renderCourses(curWho);
   setView('core', true);
   markPin('산지천');
+  if (ST && !H.RM) ST.create({ trigger: svg, start: 'top 70%', once: true, onEnter: () => { if (!played) gsap.delayedCall(0.3, () => { if (!played) pick(0, true); }); } });
+  else pick(0);
 
-  /* 지도 선이 그려지며 등장, 첫 코스 자동 재생 */
-  const lines = svg.querySelectorAll('.map-lines path');
-  if (gsap && ST && !H.RM) {
-    lines.forEach((p) => { const L = p.getTotalLength(); p.style.strokeDasharray = `${L} ${L}`; p.style.strokeDashoffset = L; });
-    ST.create({ trigger: svg, start: 'top 75%', once: true, onEnter: () => {
-      gsap.to(lines, { strokeDashoffset: 0, duration: 1.7, ease: 'power2.inOut', stagger: 0.08, onComplete: () => lines.forEach((p) => { p.style.strokeDasharray = 'none'; }) });
-      gsap.from(pinsG.children, { scale: 0, transformOrigin: 'center', duration: 0.7, ease: 'back.out(2)', stagger: 0.1, delay: 0.9 });
-      gsap.delayedCall(1.8, () => choose(0, true));
-    } });
-  } else choose(0);
-
-  /* 다른 화면에서 부르기 */
-  const scrollToMap = () => {
-    if (ST) ST.refresh();
-    const y = document.getElementById('map').getBoundingClientRect().top + window.scrollY - 10;
-    window.scrollTo({ top: y, behavior: H.RM ? 'auto' : 'smooth' });
+  /* 다른 화면에서 부르기: 지도까지 부드럽게 내려온 뒤(js/core.js HOJONO.scrollToEl) 그 인물의 코스 재생 */
+  const toMap = (fn) => {
+    played = true; // 내려오는 길에 첫 코스가 먼저 재생되지 않게
+    H.scrollToEl(document.getElementById('map'), 10, fn);
   };
-  H.selectWho = (who) => { scrollToMap(); setTimeout(() => { curWho = who; renderCourses(who); choose(0); }, H.RM ? 0 : 900); };
-  H.focusPlace = (who, place) => {
-    scrollToMap();
-    setTimeout(() => {
-      curWho = who; renderCourses(who);
-      const i = Math.max(0, COURSES[who].findIndex((c) => c.stops[0] === place));
-      choose(i); markPin(place);
-    }, H.RM ? 0 : 900);
-  };
+  H.selectWho = (who) => toMap(() => { curWho = who; renderCourses(who); pick(0); });
+  H.focusPlace = (who, place) => toMap(() => {
+    curWho = who; renderCourses(who);
+    pick(Math.max(0, COURSES[who].findIndex((c) => c.stops[0] === place)));
+  });
 })();
