@@ -4,7 +4,11 @@
   const HOJONO = (window.HOJONO = { RM });
   const gsap = window.gsap;
   const ST = window.ScrollTrigger;
-  if (gsap && ST) gsap.registerPlugin(ST);
+  if (gsap && ST) {
+    gsap.registerPlugin(ST);
+    /* 휴대폰 주소창이 접히고 펼쳐지며 높이만 바뀔 때는 위치를 다시 계산하지 않음(스크롤 중 화면이 튀지 않게) */
+    ST.config({ ignoreMobileResize: true });
+  }
 
   /* 낱말 단위로 감싸기 (em 등 안쪽 태그 유지) */
   HOJONO.splitWords = (el, cls = 'w') => {
@@ -261,36 +265,50 @@
   /* 페이지 안에서 다른 화면으로 부드럽게 이동.
      브라우저 기본 부드러운 이동(behavior:'smooth')은 붙잡힌 화면(쪼꼬미·연회 등)의 위치를 다시 계산할 때
      중간에 끊기거나 엉뚱한 곳으로 튀므로(특히 휴대폰), 매 프레임 목적지를 다시 재면서 직접 옮긴다.
-     to: 요소 또는 숫자(높이). 손가락·휠·키를 쓰면 바로 멈추고 사용자에게 넘김 */
-  let scrollTween = null;
+     to: 요소 또는 숫자(높이). 손가락·휠·키를 쓰면 바로 멈추고 사용자에게 넘김.
+     도착한 뒤에도 잠깐(HOLD초) 자리를 지킴: 휴대폰 주소창이 접히거나 붙잡힌 화면 높이가 다시 계산되어
+     목적지가 밀려나면 다시 맞춤(도착 직후 엉뚱한 화면으로 올라가는 문제) */
+  let scrollTween = null, holdOff = null;
+  const HOLD = 1.5;
   HOJONO.scrollToEl = (to, offset = 10, onDone) => {
     const target = () => (typeof to === 'number' ? to : to.getBoundingClientRect().top + window.scrollY - offset);
-    const jump = (y) => window.scrollTo({ top: Math.max(0, y), behavior: 'instant' });
+    const jump = (y) => window.scrollTo(0, Math.max(0, Math.round(y))); // 모든 브라우저(아이폰 사파리 포함)에서 바로 이동하는 형태
     if (scrollTween) scrollTween.kill();
+    if (holdOff) holdOff();
     if (!gsap || RM) { jump(target()); if (onDone) onDone(); return; }
     const from = window.scrollY, o = { p: 0 };
-    const quit = () => { if (scrollTween) scrollTween.kill(); scrollTween = null; off(); };
+    let holdT = null;
+    const stopHold = () => { if (holdT) { gsap.ticker.remove(holdT); holdT = null; } };
+    const quit = () => { if (scrollTween) scrollTween.kill(); scrollTween = null; stopHold(); off(); };
     const EV = ['wheel', 'touchstart', 'keydown'];
-    const off = () => EV.forEach((ev) => window.removeEventListener(ev, quit));
+    const off = () => { EV.forEach((ev) => window.removeEventListener(ev, quit)); holdOff = null; };
     EV.forEach((ev) => window.addEventListener(ev, quit, { passive: true }));
+    holdOff = quit;
     const dur = Math.min(1.4, Math.max(0.6, Math.abs(target() - from) / 3000));
     scrollTween = gsap.to(o, { p: 1, duration: dur, ease: 'power2.inOut',
       onUpdate: () => jump(from + (target() - from) * o.p),
-      onComplete: () => { off(); scrollTween = null; jump(target()); if (onDone) onDone(); } });
+      onComplete: () => {
+        scrollTween = null; jump(target());
+        if (onDone) onDone();
+        const until = performance.now() + HOLD * 1000;
+        holdT = () => { if (performance.now() > until) { stopHold(); off(); return; } const t = target(); if (Math.abs(t - window.scrollY) > 2) jump(t); };
+        gsap.ticker.add(holdT);
+      } });
   };
 
   /* 머리의 HOJONO 글자: 첫 화면(히어로)부터 모든 장면이 처음처럼 다시 재생되도록 맨 위에서 새로 불러옴 */
   const logo = nav.querySelector('.nav-logo');
   if (logo) logo.addEventListener('click', (e) => {
     e.preventDefault();
-    window.scrollTo({ top: 0, behavior: 'instant' });
+    window.scrollTo(0, 0);
     location.reload();
   });
 
   /* 같은 페이지 앵커 이동 */
   document.addEventListener('click', (e) => {
     const a = e.target.closest('a[href^="#"]');
-    if (!a || a === logo) return;
+    /* 이미 다른 곳에서 처리한 링크(예: 03 패널 → 인물 상세 열기)는 건드리지 않음. 여기서 또 이동하면 앞의 이동과 그 뒤 할 일이 취소됨 */
+    if (!a || a === logo || e.defaultPrevented) return;
     const id = a.getAttribute('href').slice(1);
     const t = id === 'top' ? 0 : document.getElementById(id);
     if (t == null) return;
