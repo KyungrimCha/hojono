@@ -1,0 +1,22 @@
+# 원본 자료(영상·고해상도 이미지)는 저장소 밖에서 보관
+assets/
+captures/
+# 게시·확인용으로 만들어지는 파일
+_site/
+dist/
+preview.html
+fonts-test.html
+proto/dist/
+proto/preview.html
+proto/fonts-test.html
+# 도구·개인 설정
+node_modules/
+.claude/
+.DS_Store
+Thumbs.db
+# 내부 작업 자료: 기획안(참고 사이트 이미지 포함), 시안·이미지 생성 프롬프트, 예전 판, 서체 비교 페이지.
+# 공개 저장소에는 올리지 않고 바탕화면 폴더에만 보관
+plan/
+design/
+_archive/
+fonts-compare.html
