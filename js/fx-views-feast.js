@@ -34,6 +34,7 @@
       ST.create({ trigger: feast, start: 'top top', end: () => '+=' + window.innerHeight * 1.6, pin: true, scrub: 0.6, anticipatePin: 1, onUpdate: (s) => apply(s.progress) });
       apply(0);
     } else apply(1);
-    play.addEventListener('click', () => H.openVideo(null, '보름달 연회 프롤로그 · 약 1분 21초 · 준비 중', play));
+    /* 누르면 영상 화면이 열리며 소리와 함께 재생(누를 때만 재생, 저절로 소리 나지 않음) */
+    play.addEventListener('click', () => H.openVideo('video/feast-prologue.mp4', '보름달 연회 프롤로그 · 약 1분 21초', play, 'img/moon.jpg'));
   }
 })();

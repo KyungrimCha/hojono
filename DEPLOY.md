@@ -14,24 +14,26 @@
 작업 브랜치의 예전 기록에는 위 내부 자료가 들어 있다.
 그래서 공개용으로는 기록 없이 지금 모습 한 번만 담은 `publish` 브랜치를 올린다.
 
-```
-git remote add origin https://github.com/<아이디>/<저장소 이름>.git
-git push -u origin publish:main
-```
+- 저장소: https://github.com/KyungrimCha/hojono (공개)
+- 사이트: https://kyungrimcha.github.io/hojono/
+- 이 컴퓨터의 `origin`이 위 저장소로 연결되어 있고, `publish` 브랜치가 저장소의 `main`으로 올라간다.
 
 나중에 고친 내용을 다시 올릴 때는 작업 브랜치에서 커밋한 뒤 `publish`에 새 모습을 한 번 더 담아 올린다.
+공개 커밋에는 개인 메일 대신 깃허브 가림 주소(noreply)를 쓴다.
 
 ```
 git checkout publish
-git checkout <작업 브랜치> -- .
-git commit -m "업데이트"
+git checkout stage1/skeleton-to-source -- .
+git -c user.email=76684108+KyungrimCha@users.noreply.github.com commit -m "업데이트"
 git push origin publish:main
-git checkout <작업 브랜치>
+git checkout stage1/skeleton-to-source
 ```
 
-## 처음 한 번 (깃허브 화면에서)
+작업 브랜치에서 지운 파일은 위 방법으로는 `publish`에서 지워지지 않으니 `git rm`으로 따로 지운다.
 
-1. 저장소 **Settings → Pages → Build and deployment → Source**를 **GitHub Actions**로 바꾼다.
+## 깃허브 페이지 설정 (2026-11-21 완료)
+
+1. 저장소 **Settings → Pages → Build and deployment → Source**가 **GitHub Actions**로 되어 있다.
 2. `main`에 올리면 `.github/workflows/pages.yml`이 자동으로 배포한다.
    Actions 탭에서 "깃허브 페이지 배포"를 직접 실행해도 된다.
 3. 주소: `https://<아이디>.github.io/<저장소 이름>/`

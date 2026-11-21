@@ -202,11 +202,12 @@
     else if (menuBtn.getAttribute('aria-expanded') === 'true') setMenu(false);
   });
 
-  /* 영상 시트 */
-  HOJONO.openVideo = (src, note, fromEl) => {
+  /* 영상 시트. poster: 영상이 뜨기 전에 보일 그림(없으면 비움) */
+  HOJONO.openVideo = (src, note, fromEl, poster) => {
     const sheet = document.getElementById('videoSheet');
     const v = document.getElementById('videoEl');
     document.getElementById('videoNote').textContent = note || '';
+    if (poster) v.poster = poster; else v.removeAttribute('poster');
     if (src) { v.hidden = false; if (v.getAttribute('src') !== src) v.src = src; } else { v.hidden = true; v.removeAttribute('src'); }
     HOJONO.openSheet(sheet, fromEl);
     if (src) v.play().catch(() => {});
