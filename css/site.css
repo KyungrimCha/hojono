@@ -213,7 +213,7 @@ body.is-night .feather{filter:drop-shadow(0 0 1px rgba(234,218,206,.9)) drop-sha
 
 /* 03/BONUS 쪼꼬미들 */
 .friends{height:100vh;height:100svh}
-.friends-stage{position:relative;height:100%;overflow:hidden;background:#d3e3ea;color:var(--ink)}
+.friends-stage{position:relative;height:100%;overflow:hidden;background:#a9c8d8;color:var(--ink)}
 .friends-meta{position:absolute;top:clamp(80px,12vh,120px);left:0;right:0;display:grid;gap:10px;z-index:2}
 .friends-lede{max-width:24rem;font-size:.92rem}
 .friends-slides{position:absolute;inset:0}
@@ -454,6 +454,11 @@ body.is-night .feather{filter:drop-shadow(0 0 1px rgba(234,218,206,.9)) drop-sha
 .doc-mini h2{font-size:1.6rem;margin-bottom:6px}
 .doc-mini h3{font:600 .95rem/1.4 var(--body);margin-top:10px}
 .doc-mini p{font-size:.92rem;color:var(--sub);line-height:1.8}
+.doc-mini ul,.doc ul{margin:0;padding-left:1.1em;display:grid;gap:6px;color:var(--sub);line-height:1.75}
+.doc-mini ul{font-size:.92rem}
+.doc ul{color:inherit}
+.doc-mini a,.doc a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+.doc-date{font-size:.82rem;color:var(--muted);margin-top:8px}
 .modal-ok{justify-self:end}
 
 /* 알림 문구(js/core.js HOJONO.toast): 화면 아래 가운데에 먹색 띠로 잠깐 */
@@ -567,6 +572,8 @@ textarea{width:100%;font:inherit;line-height:32px;padding:14px 16px;border:1px s
 
 /* 저장 전에는 씨앗 봉투, 저장 뒤에는 입력 칸을 숨김(display:grid가 hidden을 덮어쓰지 않게) */
 .note[hidden],.kept[hidden]{display:none}
+/* 로봇 막기용 숨은 칸: 사람 눈과 화면 읽기 프로그램에는 안 보임 */
+.hp{position:absolute!important;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none}
 
 /* 시트(상세 화면) */
 .sheet{position:fixed;inset:0;z-index:70;background:var(--paper);color:var(--ink);overflow-y:auto;overscroll-behavior:contain}
@@ -603,6 +610,10 @@ details p{margin-top:10px}
 @media (max-width:640px){.fold-steps{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .video{justify-items:center;min-height:100%;align-content:center}
 .video video{width:100%;max-height:72vh;background:#000;border-radius:6px}
+/* 유튜브: 16:9 그대로, 화면 높이의 72%를 넘지 않게 */
+.video-yt{width:min(100%,calc(72vh * 16 / 9));aspect-ratio:16/9;background:#000;border-radius:6px;overflow:hidden}
+.video-yt iframe{width:100%;height:100%;border:0;display:block}
+.video-yt[hidden]{display:none}
 
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition-duration:.01s!important}
@@ -638,7 +649,6 @@ body.page-object .page-head{background:var(--orange)}
 .obj-colors i{width:22px;height:22px;border-radius:50%;border:1px solid rgba(32,35,32,.4);display:block}
 .sheet-object .btn,.page-object .btn{border-color:var(--ink)}
 .sheet-object .btn:not(.btn-line),.page-object .btn:not(.btn-line){background:var(--ink);color:var(--paper)}
-/* 메인 → 상세로 넘어갈 때 덮는 주황 막 */
 /* 개인정보 처리방침 */
 .doc{display:grid;gap:14px;padding-block:30px 80px;max-width:46rem}
 .doc h1{font-size:clamp(2rem,5vw,3rem)}

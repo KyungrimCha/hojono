@@ -189,6 +189,7 @@
       if (after) after();
     };
     const v = sheet.querySelector('video'); if (v) v.pause();
+    sheet.querySelectorAll('iframe').forEach((f) => f.remove()); // 유튜브는 창을 없애야 소리까지 멈춤
     if (gsap && !RM && sheet._from) morph(sheet, rectOf(sheet._from), 1, 0, 0.9, 'expo.inOut', () => { sheet.style.clipPath = ''; done(); });
     else done();
   };
@@ -210,15 +211,26 @@
     else if (menuBtn.getAttribute('aria-expanded') === 'true') setMenu(false);
   });
 
-  /* 영상 시트. poster: 영상이 뜨기 전에 보일 그림(없으면 비움) */
-  HOJONO.openVideo = (src, note, fromEl, poster) => {
+  /* 영상 시트. src가 'youtube:영상아이디'면 유튜브를 안에 넣어 재생(쿠키를 덜 남기는 youtube-nocookie 주소),
+     아니면 페이지 안의 mp4를 재생. 누를 때만 열리고, 닫으면 멈춤 */
+  HOJONO.openVideo = (src, note, fromEl) => {
     const sheet = document.getElementById('videoSheet');
     const v = document.getElementById('videoEl');
+    const yt = document.getElementById('videoYt');
     document.getElementById('videoNote').textContent = note || '';
-    if (poster) v.poster = poster; else v.removeAttribute('poster');
-    if (src) { v.hidden = false; if (v.getAttribute('src') !== src) v.src = src; } else { v.hidden = true; v.removeAttribute('src'); }
+    const ytId = src && src.startsWith('youtube:') ? src.slice(8) : null;
+    yt.hidden = !ytId; v.hidden = !!ytId || !src;
+    yt.replaceChildren();
+    if (ytId) {
+      const f = document.createElement('iframe');
+      f.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(ytId)}?autoplay=1&rel=0&playsinline=1`;
+      f.title = note || '영상';
+      f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+      f.allowFullscreen = true;
+      yt.appendChild(f);
+    } else if (src) { if (v.getAttribute('src') !== src) v.src = src; } else v.removeAttribute('src');
     HOJONO.openSheet(sheet, fromEl);
-    if (src) v.play().catch(() => {});
+    if (src && !ytId) v.play().catch(() => {});
   };
 
   /* 모달(가운데 작은 창): data-modal="아이디"가 붙은 링크·버튼을 누르면 열림. 바깥·닫기·Esc로 닫힘 */

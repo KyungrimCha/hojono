@@ -15,7 +15,9 @@
 그래서 공개용으로는 기록 없이 지금 모습 한 번만 담은 `publish` 브랜치를 올린다.
 
 - 저장소: https://github.com/KyungrimCha/hojono (공개)
-- 사이트: https://kyungrimcha.github.io/hojono/
+- 사이트: https://hojono.com/ (예전 주소 kyungrimcha.github.io/hojono, www.hojono.com은 여기로 넘어감)
+- 도메인: 가비아 DNS. A 레코드 `@` 4개(185.199.108~111.153), CNAME `www` → `kyungrimcha.github.io.`
+  - 저장소를 클라이언트 계정으로 옮기면: 저장소 Settings → Pages에 `hojono.com`을 다시 넣고, 가비아의 `www` CNAME만 `클라이언트아이디.github.io.`로 바꾼다(A 레코드는 그대로).
 - 이 컴퓨터의 `origin`이 위 저장소로 연결되어 있고, `publish` 브랜치가 저장소의 `main`으로 올라간다.
 
 나중에 고친 내용을 다시 올릴 때는 작업 브랜치에서 커밋한 뒤 `publish`에 새 모습을 한 번 더 담아 올린다.
@@ -60,7 +62,11 @@ node tools/build-site.js
 ## 메모
 
 - 공유 미리보기 이미지: `img/og.jpg` (1200×630, 쪼꼬미 영상 9.4초 장면: 네 친구가 함께 있는 모습)
-- 탭 아이콘: `img/favicon.png` (64×64, 파랑새 쪼꼬미 얼굴)
-- 지금은 클라이언트에게 보여 드리는 시안이다. 소식받기·흔적 남기기는 화면에서만 동작하고 실제로 저장되지 않으며,
-  소식받기를 누르면 "지금은 시안 화면이라 실제로 신청되지는 않아요"라고 안내한다(구글 시트 연결은 다음 단계).
-- 개인정보 처리방침의 담당자 연락처는 정식 공개 전에 채워야 한다.
+- 탭 아이콘: `img/favicon.png` (64×64, 귤배(파랑새 쪼꼬미) 얼굴)
+- 소식받기·흔적 남기기는 클라이언트 구글 시트로 받는다. 설정 방법과 시트용 스크립트: `tools/sheet/README.md`, `tools/sheet/Code.gs`
+  2026-11-25 연결 완료: 클라이언트와 함께 쓰는 구글 드라이브의 시트 "HOJONO 사이트 접수"(탭: 흔적 남기기, 소식받기),
+  앱스 스크립트 프로젝트 "HOJONO 사이트 접수"(웹 앱, 이 시트만 다루는 권한). 받는 주소는 `js/fx-objects-trace.js`의 `SHEET_URL`.
+  스크립트는 지금 개발자(디자인공도) 구글 계정 권한으로 실행된다. 클라이언트 계정으로 넘길 때는 클라이언트 계정에서 README대로 다시 배포하고 새 주소로 바꾼다.
+  `SHEET_URL`을 비우면 시안 모드(아무것도 보내지 않고 "시안 화면이라 실제로 신청되지는 않아요"로 안내).
+- 개인정보처리자: PSW, 문의 pswjeju@gmail.com (메인 처리방침 모달과 privacy/ 두 곳)
+- 보름달 연회 프롤로그는 유튜브 일부 공개 영상(yZenKcavBog)을 youtube-nocookie로 넣는다. 영상을 바꾸면 js/fx-views-feast.js의 아이디만 바꾸면 됨

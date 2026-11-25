@@ -35,6 +35,6 @@
       apply(0);
     } else apply(1);
     /* 누르면 영상 화면이 열리며 소리와 함께 재생(누를 때만 재생, 저절로 소리 나지 않음) */
-    play.addEventListener('click', () => H.openVideo('video/feast-prologue.mp4', '보름달 연회 프롤로그 · 약 1분 21초', play, 'img/moon.jpg'));
+    play.addEventListener('click', () => H.openVideo('youtube:yZenKcavBog', '보름달 연회 프롤로그 · 약 2분', play)); // 유튜브(일부 공개) 최신본
   }
 })();

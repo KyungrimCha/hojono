@@ -109,10 +109,10 @@
         <p class="friends-lede">설랑이 친구들에게서 영감을 얻어 그리고 디자인한 쪼꼬미들. 아래 모습은 캐릭터 비주얼 시안입니다.</p>
       </div>
       <div class="friends-slides">
-        <figure class="friend" data-color="#d3e3ea"><img src="img/jj-bird.webp" alt="파란 새 쪼꼬미 인형 시안"><figcaption><span class="friend-count">01 / 04</span><span class="friend-name">파란 새</span></figcaption></figure>
-        <figure class="friend" data-color="#a9c8d8"><img src="img/jj-tiger.webp" alt="파란 옷을 입은 작은 호랑이 쪼꼬미 인형 시안"><figcaption><span class="friend-count">02 / 04</span><span class="friend-name">작은 호랑이</span></figcaption></figure>
-        <figure class="friend" data-color="#dcae98"><img src="img/jj-deer.webp" alt="초록 망토를 입은 작은 노루 쪼꼬미 인형 시안"><figcaption><span class="friend-count">03 / 04</span><span class="friend-name">작은 노루</span></figcaption></figure>
-        <figure class="friend" data-color="#ec612e"><img src="img/jj-crow.webp" alt="주황 목도리를 한 작은 까마귀 쪼꼬미 인형 시안"><figcaption><span class="friend-count">04 / 04</span><span class="friend-name">작은 까마귀</span></figcaption></figure>
+        <figure class="friend" data-color="#a9c8d8"><img src="img/jj-tiger.webp" alt="파란 옷을 입은 호랑이 쪼꼬미 설랑 인형 시안"><figcaption><span class="friend-count">01 / 04</span><span class="friend-name">설랑</span></figcaption></figure>
+        <figure class="friend" data-color="#ec612e"><img src="img/jj-crow.webp" alt="주황 목도리를 한 까마귀 쪼꼬미 해람 인형 시안"><figcaption><span class="friend-count">02 / 04</span><span class="friend-name">해람</span></figcaption></figure>
+        <figure class="friend" data-color="#dcae98"><img src="img/jj-deer.webp" alt="초록 망토를 입은 노루 쪼꼬미 서린 인형 시안"><figcaption><span class="friend-count">03 / 04</span><span class="friend-name">서린</span></figcaption></figure>
+        <figure class="friend" data-color="#d3e3ea"><img src="img/jj-bird.webp" alt="파랑새 쪼꼬미 귤배 인형 시안"><figcaption><span class="friend-count">04 / 04</span><span class="friend-name">귤배</span></figcaption></figure>
       </div>
       <div class="friends-foot wrap">
         <span class="friends-note">캐릭터 비주얼 시안 · 판매 안내 아님</span>
@@ -222,7 +222,7 @@
         <p>한때 어승생악 어귀에서 열리던 성대한 연회는 사라졌습니다. 시간이 흐른 뒤 설랑은 해람과 서린을 불러, 그 이름을 세 친구가 다시 만나는 작은 자리에 붙였습니다. 달이 뜨면 각자의 장소에서 가져온 이야기와 안부를 나누고, 늦게 오는 이를 위해 자리를 남겨 둡니다.</p>
         <p class="small">과거 연회와 현재의 모임은 HOJONO 세계관의 창작 설정입니다.</p>
       </div>
-      <button class="feast-play" type="button" id="feastPlay" data-cursor="재생" aria-label="프롤로그 영상 재생, 약 1분 21초"><span></span><em>프롤로그 · 1:21</em></button>
+      <button class="feast-play" type="button" id="feastPlay" data-cursor="재생" aria-label="프롤로그 영상 재생, 약 2분"><span></span><em>프롤로그 · 1:59</em></button>
     </div>
   </section>
 
@@ -286,6 +286,7 @@
           </div>
         </fieldset>
         <label class="say" for="say"><span>03 · 한마디</span><textarea id="say" name="say" maxlength="500" rows="5" placeholder="오늘 걸은 길에서 본 것을 적어 주세요."></textarea></label>
+        <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
         <p class="form-msg" id="noteMsg" role="status"></p>
         <div class="note-foot"><span class="small"><span id="sayCount">0</span> / 500 · 이름·연락처 같은 개인정보는 적지 말아 주세요</span><button class="btn" type="submit">내 흔적 저장하기</button></div>
       </form>
@@ -312,7 +313,8 @@
           <input id="newsMail" type="email" autocomplete="email" placeholder="name@example.com">
           <button class="news-go" type="submit" disabled>소식받기</button>
         </div>
-        <label class="consent" for="newsOk"><input id="newsOk" type="checkbox"><span>이메일 수집·이용에 동의합니다. 해지할 때까지 보관하며, 만 14세 이상만 신청할 수 있습니다. <a href="privacy/" data-modal="privacyModal">개인정보 처리방침</a></span></label>
+        <label class="consent" for="newsOk"><input id="newsOk" type="checkbox"><span>이메일 수집·이용과 구글 시트(국외) 보관에 동의합니다. 해지할 때까지 보관하며, 만 14세 이상만 신청할 수 있습니다. <a href="privacy/" data-modal="privacyModal">개인정보 처리방침</a></span></label>
+        <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
         <p class="form-msg" id="newsMsg" role="status"></p>
       </form>
     </div>
@@ -388,16 +390,24 @@
   <div class="modal-back" data-modal-close></div>
   <div class="modal-panel">
     <button class="modal-x" type="button" data-modal-close aria-label="닫기">✕</button>
-    <div class="modal-body doc-mini">
+    <div class="modal-body doc-mini" data-prose>
       <h2 id="privacyTitle">개인정보 처리방침</h2>
+      <p>PSW(Phase Story Works)는 HOJONO 웹사이트에서 받는 개인정보를 아래와 같이 처리합니다. 이 사이트는 회원가입이 없으며, 소식받기와 흔적 남기기 두 가지만 받습니다.</p>
       <h3>수집 항목과 목적</h3>
-      <p>소식받기를 신청한 경우 이메일 주소를 수집하며, HOJONO 새 이야기·영상·제품 소식을 보내는 데에만 씁니다. 흔적 남기기(의견)는 이름이나 연락처 없이 익명으로 저장합니다.</p>
-      <h3>보유 기간</h3>
-      <p>소식받기 해지 시까지 보관하며, 해지를 요청하면 지체 없이 삭제합니다. 모든 메일 하단에 해지 방법을 안내합니다.</p>
-      <h3>동의 거부</h3>
-      <p>동의를 거부할 수 있으며, 거부해도 흔적 남기기는 이용할 수 있습니다. 만 14세 이상만 신청할 수 있습니다.</p>
+      <ul><li>소식받기: 이메일 주소, 신청 시각. HOJONO의 새 이야기·영상·제품 소식을 이메일로 보내는 데에만 씁니다.</li><li>흔적 남기기: 고른 인물과 장소, 남긴 한마디, 남긴 시각. 이름이나 연락처는 받지 않으며, 이야기 기록과 콘텐츠 기획에 참고합니다. 한마디에는 이름·연락처 같은 개인정보를 적지 말아 주세요.</li></ul>
+      <h3>보유 기간과 파기</h3>
+      <ul><li>이메일 주소: 소식받기를 해지하거나 삭제를 요청할 때까지 보관하고, 그때 지체 없이 삭제합니다. 소식받기를 더 운영하지 않게 되면 함께 삭제합니다.</li><li>흔적 남기기: HOJONO 프로젝트를 운영하는 동안 보관하고, 운영이 끝나면 지체 없이 삭제합니다.</li><li>삭제할 때는 보관하던 시트에서 해당 내용을 지워 되살릴 수 없게 합니다.</li></ul>
+      <h3>처리 위탁과 국외 이전</h3>
+      <p>제출한 내용은 Google의 스프레드시트 서비스(구글 시트)에 저장됩니다.</p><ul><li>이전받는 자: Google LLC (문의: <a href="https://support.google.com/policies" target="_blank" rel="noopener">support.google.com/policies</a>)</li><li>이전 국가: 미국 등 Google 데이터센터가 있는 국가</li><li>이전 시점과 방법: "소식받기" 또는 "내 흔적 저장하기"를 누를 때 인터넷으로 전송</li><li>이전 항목과 보유 기간: 위의 수집 항목, 보유 기간과 같음</li></ul><p>국외 이전을 원하지 않으면 소식받기와 흔적 남기기를 이용하지 않으면 됩니다. 이용하지 않아도 사이트의 다른 기능은 모두 쓸 수 있습니다.</p>
+      <h3>외부 영상</h3>
+      <p>보름달 연회 영상을 재생하면 유튜브(Google) 플레이어가 열리며, 시청과 관련한 정보는 Google 개인정보처리방침에 따라 처리됩니다. 재생 버튼을 누르기 전에는 유튜브에 연결되지 않습니다.</p>
+      <h3>동의 거부와 나이 제한</h3>
+      <p>개인정보 수집·이용에 동의하지 않을 수 있으며, 이 경우 소식받기만 신청할 수 없고 다른 기능은 그대로 쓸 수 있습니다. 소식받기는 만 14세 이상만 신청할 수 있습니다.</p>
+      <h3>정보주체의 권리</h3>
+      <p>언제든지 자신의 개인정보 열람, 정정, 삭제, 처리 정지를 요청할 수 있습니다. 아래 문의처로 요청하면 지체 없이 처리합니다. 소식받기 메일 하단에도 해지 방법을 안내합니다.</p>
       <h3>개인정보처리자와 문의</h3>
-      <p>개인정보처리자와 담당자 연락처는 확인 중입니다.</p>
+      <p>개인정보처리자: PSW(Phase Story Works)<br>문의: <a href="mailto:pswjeju@gmail.com">pswjeju@gmail.com</a></p>
+      <p class="doc-date">시행일: 2026년 11월 25일</p>
     </div>
     <button class="btn modal-ok" type="button" data-modal-close>확인</button>
   </div>
@@ -408,6 +418,7 @@
   <div class="sheet-inner video">
     <button class="sheet-close" type="button" data-close>닫기 ✕</button>
     <video id="videoEl" controls playsinline preload="none"></video>
+    <div class="video-yt" id="videoYt" hidden></div>
     <p class="small" id="videoNote"></p>
   </div>
 </div>
